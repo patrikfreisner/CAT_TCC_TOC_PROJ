@@ -1,0 +1,9 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  bpm_diagram_code: MyString
+  constraint_limit: 1.5
+
+two:
+  bpm_diagram_code: MyString
+  constraint_limit: 1.5

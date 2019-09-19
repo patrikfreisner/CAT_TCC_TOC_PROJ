@@ -1,0 +1,21 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  resource: 
+  compound: one
+  can_handle: one
+  can_produce: one
+  is_constraint: false
+  bpm_notation_code: MyString
+  dependencies: one
+
+two:
+  name: MyString
+  resource: 
+  compound: two
+  can_handle: two
+  can_produce: two
+  is_constraint: false
+  bpm_notation_code: MyString
+  dependencies: two
