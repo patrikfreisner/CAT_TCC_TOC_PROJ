@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :related_notations
   resources :resources
   resources :information
   resources :compounds

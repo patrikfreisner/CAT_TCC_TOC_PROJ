@@ -8,7 +8,6 @@ class CreateNotations < ActiveRecord::Migration[5.2]
       t.references :can_produce
       t.boolean :is_constraint
       t.string :bpm_notation_code
-      t.references :dependencies
       t.references :diagram
 
       t.timestamps
@@ -16,7 +15,6 @@ class CreateNotations < ActiveRecord::Migration[5.2]
 
     add_foreign_key :notations, :information, column: :can_handle_id, primary_key: :id
     add_foreign_key :notations, :information, column: :can_produce_id, primary_key: :id
-
-    add_foreign_key :notations, :notations, column: :dependencies_id, primary_key: :id
+    
   end
 end

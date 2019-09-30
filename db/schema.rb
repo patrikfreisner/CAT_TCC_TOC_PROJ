@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_12_230012) do
+ActiveRecord::Schema.define(version: 2019_09_27_005235) do
 
   create_table "compounds", force: :cascade do |t|
     t.string "name"
@@ -43,15 +43,20 @@ ActiveRecord::Schema.define(version: 2019_08_12_230012) do
     t.integer "can_produce_id"
     t.boolean "is_constraint"
     t.string "bpm_notation_code"
-    t.integer "dependencies_id"
     t.integer "diagram_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["can_handle_id"], name: "index_notations_on_can_handle_id"
     t.index ["can_produce_id"], name: "index_notations_on_can_produce_id"
     t.index ["compound_id"], name: "index_notations_on_compound_id"
-    t.index ["dependencies_id"], name: "index_notations_on_dependencies_id"
     t.index ["diagram_id"], name: "index_notations_on_diagram_id"
+  end
+
+  create_table "related_notations", force: :cascade do |t|
+    t.integer "notation_id"
+    t.integer "related_notation_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "resources", force: :cascade do |t|

@@ -14,10 +14,15 @@ class NotationsController < ApplicationController
   end
 
     # GET /notations/1
-    def findByNotationCode
-      @notation = Notation.where(bpm_notation_code: params[:bpm_notation_code])
+  def findByNotationCode
+    @notation = Notation.where(bpm_notation_code: params[:bpm_notation_code])
+    print @notation.any?
+    if @notation.any?
       render json: @notation
+    else
+      render :status => 404
     end
+  end
 
   # POST /notations
   def create
@@ -32,6 +37,16 @@ class NotationsController < ApplicationController
 
   # PATCH/PUT /notations/1
   def update
+
+    if params[:related_notation] != nil
+      @notationsArray = []
+      params[:related_notation].each do |notation_id| 
+        @notationsArray.push(Notation.find(notation_id[:id]))
+      end 
+      puts @notationsArray
+    end
+
+    @notation.related_notation = @notationsArray
     if @notation.update(notation_params)
       render json: @notation
     else
@@ -52,6 +67,21 @@ class NotationsController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def notation_params
-      params.require(:notation).permit(:name, :resource, :compound_id, :can_handle_id, :can_produce_id, :can_handle, :can_produce, :is_constraint, :bpm_notation_code, :dependencies, :dependencies_id, :diagram_id, :can_handle_attributes => [:quantity, :time], :can_produce_attributes => [:quantity, :time], :compound_attributes => [:name])
+      params.require(:notation).permit(
+        :name, 
+        :resource, 
+        :compound_id, 
+        :can_handle_id, 
+        :can_produce_id, 
+        :can_handle, 
+        :can_produce, 
+        :is_constraint, 
+        :bpm_notation_code, 
+        :diagram_id , 
+        :related_notation, 
+        :related_notation_id,
+        :can_handle_attributes => [:quantity, :time], 
+        :can_produce_attributes => [:quantity, :time], 
+        :compound_attributes => [:name])
     end
 end
