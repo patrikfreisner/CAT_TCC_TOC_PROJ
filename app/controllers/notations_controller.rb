@@ -27,7 +27,15 @@ class NotationsController < ApplicationController
   # POST /notations
   def create
     @notation = Notation.new(notation_params)
-
+    
+    if params[:related_notation] != nil
+      @notationsArray = []
+      params[:related_notation].each do |notation_id| 
+        @notationsArray.push(Notation.find(notation_id[:id]))
+      end 
+      @notation.related_notation = @notationsArray
+    end
+    
     if @notation.save
       render json: @notation, status: :created, location: @notation
     else
@@ -43,10 +51,8 @@ class NotationsController < ApplicationController
       params[:related_notation].each do |notation_id| 
         @notationsArray.push(Notation.find(notation_id[:id]))
       end 
-      puts @notationsArray
+      @notation.related_notation = @notationsArray
     end
-
-    @notation.related_notation = @notationsArray
     if @notation.update(notation_params)
       render json: @notation
     else
@@ -80,8 +86,8 @@ class NotationsController < ApplicationController
         :diagram_id , 
         :related_notation, 
         :related_notation_id,
-        :can_handle_attributes => [:quantity, :time], 
-        :can_produce_attributes => [:quantity, :time], 
-        :compound_attributes => [:name])
+        :can_handle_attributes => [:id, :quantity, :time], 
+        :can_produce_attributes => [:id, :quantity, :time], 
+        :compound_attributes => [:id, :name])
     end
 end

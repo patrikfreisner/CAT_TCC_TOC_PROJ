@@ -11,8 +11,8 @@ class Notation < ApplicationRecord
 
   has_many :related_notation_associations, :class_name => "RelatedNotation"
   has_many :related_notation, :through => :related_notation_associations, :source => :related_notation
-  # has_many :inverse_related_notation_associations, :class_name => "RelatedNotation", :foreign_key => "related_notation_id"
-  # has_many :inverse_related_notation, :through => :inverse_related_notation_associations, :source => :notation
+  has_many :inverse_related_notation_associations, :class_name => "RelatedNotation", :foreign_key => "related_notation_id"
+  has_many :inverse_related_notation, :through => :inverse_related_notation_associations, :source => :notation
   
   accepts_nested_attributes_for :can_handle, :allow_destroy => true
   accepts_nested_attributes_for :can_produce, :allow_destroy => true
@@ -57,7 +57,7 @@ class Notation < ApplicationRecord
                 }
               ]
           },
-          :related_notation => {
+          :inverse_related_notation => {
             :include =>
             { :compound => {
                 :only => [
@@ -94,8 +94,62 @@ class Notation < ApplicationRecord
                     }
                   }
                 ]
+              },
+              :related_notation => {
+                :only => [
+                  :id,
+                  :bpm_notation_code,
+                  :is_constraint,
+                ],
+                :include =>
+                { 
+                  :can_produce => {
+                    :only => [
+                        :id, 
+                        :quantity, 
+                        :time,
+                        :include =>
+                        {:resource => {
+                          :only => [
+                            :id, 
+                            :name
+                          ]
+                        }
+                      }
+                    ]
+                  },
+                  :can_handle => {
+                    :only => [
+                        :id, 
+                        :quantity, 
+                        :time,
+                        :include =>
+                        {:resource => {
+                          :only => [
+                            :id, 
+                            :name
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                }
+              },
+              :inverse_related_notation => {
+                :only => [
+                  :id,
+                  :bpm_notation_code,
+                  :is_constraint,
+                ]
               }
             }
+          },
+          :related_notation => {
+            :only => [
+              :id,
+              :bpm_notation_code,
+              :is_constraint,
+            ]
           }
         }
       )
