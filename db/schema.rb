@@ -12,38 +12,38 @@
 
 ActiveRecord::Schema.define(version: 2019_09_27_005235) do
 
-  create_table "compounds", force: :cascade do |t|
+  create_table "compounds", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "diagrams", force: :cascade do |t|
+  create_table "diagrams", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name"
-    t.string "bpm_diagram_code"
+    t.text "bpm_diagram_code"
     t.float "constraint_limit"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "information", force: :cascade do |t|
+  create_table "information", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "time"
     t.string "quantity"
-    t.integer "resource_id"
+    t.bigint "resource_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["resource_id"], name: "index_information_on_resource_id"
   end
 
-  create_table "notations", force: :cascade do |t|
+  create_table "notations", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name"
     t.string "resource"
-    t.integer "compound_id"
-    t.integer "can_handle_id"
-    t.integer "can_produce_id"
+    t.bigint "compound_id"
+    t.bigint "can_handle_id"
+    t.bigint "can_produce_id"
     t.boolean "is_constraint"
     t.string "bpm_notation_code"
-    t.integer "diagram_id"
+    t.bigint "diagram_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["can_handle_id"], name: "index_notations_on_can_handle_id"
@@ -52,17 +52,21 @@ ActiveRecord::Schema.define(version: 2019_09_27_005235) do
     t.index ["diagram_id"], name: "index_notations_on_diagram_id"
   end
 
-  create_table "related_notations", force: :cascade do |t|
+  create_table "related_notations", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.integer "notation_id"
     t.integer "related_notation_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "resources", force: :cascade do |t|
+  create_table "resources", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "information", "resources"
+  add_foreign_key "notations", "compounds"
+  add_foreign_key "notations", "information", column: "can_handle_id"
+  add_foreign_key "notations", "information", column: "can_produce_id"
 end
