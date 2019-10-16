@@ -149,7 +149,24 @@ class Notation < ApplicationRecord
               :id,
               :bpm_notation_code,
               :is_constraint,
-            ]
+            ],
+            :include =>
+            { 
+              :can_produce => {
+                :only => [
+                  :id, 
+                  :quantity, 
+                  :time,
+                ]
+              },
+              :can_handle => {
+                :only => [
+                  :id, 
+                  :quantity, 
+                  :time
+                ]
+              }
+            }
           }
         }
       )
